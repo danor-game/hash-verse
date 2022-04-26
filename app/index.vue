@@ -1,17 +1,6 @@
 <template>
 	<!-- 侧边栏 -->
 	<p-sidebar>
-		<p-button ref="domButtonProfile" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
-		<p-profiles ref="domProfiles">
-			<template v-for="id of idsProfile" :key="`profiles-${id}`">
-				<p-profile-id :now="brop(who == id)" @click="changeProfile(id)">
-					<Fas corn :icon="who == id? 'user-check' : 'user'" />
-					{{id}}
-				</p-profile-id>
-			</template>
-		</p-profiles>
-
-
 		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
 			<template v-if="!tab.isHidden">
 				<p-button
@@ -43,9 +32,7 @@
 </template>
 
 <script setup>
-	import { ref, watch, onBeforeMount, inject, provide, computed, onMounted } from 'vue';
-
-	import Tippy from 'tippy.js';
+	import { ref, watch, inject, provide, computed, onMounted } from 'vue';
 
 	import TabAdmin from './lib/TabAdmin.js';
 
@@ -56,8 +43,6 @@
 	const app = inject('app');
 	const CV = inject('CV');
 	const $alert = inject('$alert');
-	const $get = inject('$get');
-	const wock = inject('$wock');
 
 
 	const moduleNow = ref(null);
@@ -107,7 +92,7 @@
 			{
 				label: '🚪 关闭',
 				tips: '关闭该标签页',
-				hidden: tab => tab.typeList == 'follow',
+				// hidden: tab => tab.typeList == 'follow',
 				fn: tab => TA.value.del(tab),
 			},
 		]
@@ -121,46 +106,7 @@
 	});
 
 
-	const cookies = document.cookie.split(';')
-		.map(raw => raw.split('='))
-		.reduce((cookies, [key, value]) => void (cookies[key] = value) || cookies, {});
-
-	const updateProfile = async who => profile.value = await $get('profile/info', { who });
-	const changeProfile = async id => location.reload(void await updateProfile(cookies.who = id));
-
-
-	const idsProfile = ref([]);
-	const atReady = async () => {
-		let who = cookies.who;
-
-
-		idsProfile.value = await $get('profile/list') ?? [];
-		if(!who) { who = idsProfile.value[0]; }
-
-		await updateProfile(who);
-
-		wock.cast('profile/auth-user', who);
-		wock.reopen = () => wock.cast('profile/auth-user', who);
-
-		TA.value.addIcon('主页', 'home', 'home', 'hashverse-Home');
-	};
-
-
-	onBeforeMount(() => wock.at('open', atReady, true));
-
-
-
-	const domButtonProfile = ref(null);
-	const domProfiles = ref(null);
-
-	onMounted(() => Tippy(domButtonProfile.value, {
-		placement: 'right-start',
-		content: domProfiles.value,
-		allowHTML: true,
-		interactive: true,
-		animation: '',
-		duration: [0, 0],
-	}));
+	onMounted(() => TA.value.addIcon('主页', 'home', 'home', 'hashverse-Home'));
 </script>
 
 <style lang="sass" scoped>

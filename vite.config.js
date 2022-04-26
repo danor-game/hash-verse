@@ -27,18 +27,5 @@ export default defineConfig({
 	clearScreen: false,
 	server: {
 		port: 4785,
-		proxy: {
-			'^/ugoira-(new|saved)/': {
-				target: 'http://127.0.0.1:14785',
-			},
-			'^/api/': {
-				target: 'http://127.0.0.1:14785',
-				changeOrigin: true,
-			},
-			'/wock': {
-				target: 'ws://127.0.0.1:14785/wock',
-				ws: true
-			},
-		}
 	}
 });
