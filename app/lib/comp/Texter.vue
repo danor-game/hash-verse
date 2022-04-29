@@ -72,7 +72,7 @@
 
 	const { label_, labelWidth_, labelAlign_ } = setupLabel(props, disabling_);
 
-	const typeDict = { text: 'text', pass: 'password', num: 'number' };
+	const typeDict = { text: 'text', pass: 'password', number: 'number' };
 	const type_ = computed(() => typeDict[props.type] || typeDict.text);
 
 	const styleLabel = computed(() => ({ width: labelWidth_.value, textAlign: labelAlign_.value }));
@@ -165,4 +165,7 @@ p-value
 
 		&:disabled
 			color: var(--colorDisable)
+
+		&::-webkit-inner-spin-button, &::-webkit-outer-spin-button
+			@apply appearance-none
 </style>

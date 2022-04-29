@@ -1,3 +1,4 @@
+
 const highlight = string => String(string)
 	.replace(/~\[(.*?)\]/g, (substr, groupA, index, raw) => {
 		return `<span style="color:green;font-weight:bold;">${groupA}</span>`;
@@ -8,38 +9,62 @@ const highlight = string => String(string)
 	;
 
 class Fight {
+
+
+
 	static sDraw = Symbol('平手');
 
 
+	/** @type {import('./Nife.js').default} */
 	nife1;
+	/** @type {import('./Nife.js').default} */
 	nife2;
 
+	option;
+
 	logs = [];
+
 	winner = null;
 
-	constructor(nife1, nife2) {
+
+	constructor(nife1, nife2, option) {
 		if(!nife1 || !nife2) { throw ('战斗人数不足'); }
 
 
 		this.nife1 = nife1;
 		this.nife2 = nife2;
+
+		this.option = Object.assign(option ?? {}, {
+			// 最大回合数
+			roundMax: 300
+		});
 	}
 
 
-	start() {
+	start(isResetLog = true) {
 		const logs = this.logs;
+		if(isResetLog) { logs.splice(0, logs.length); }
 
 
-		logs.splice(0, logs.length);
 		this.winner = null;
 		this.isDraw = false;
 
 
-		let { name: name1, hp: hp1, atk: atk1, def: def1 } = this.nife1;
-		let { name: name2, hp: hp2, atk: atk2, def: def2 } = this.nife2;
+		let { name: name1, health: hp1, attack: atk1, defense: def1 } = this.nife1;
+		let { name: name2, health: hp2, attack: atk2, defense: def2 } = this.nife2;
+		let round = 0;
 
 
 		while(hp1 > 0 && hp2 > 0) {
+			round++;
+
+			if(round > this.option.roundMax) {
+				logs.push(highlight(`~[[${name1}]]、~[[${name2}]]双方无法在${this.option.roundMax}回合内分出胜负，平手`));
+
+				return winner = Fight.sDraw;
+			}
+
+
 			let damage1_2 = atk1 - def2;
 			let damage2_1 = atk2 - def1;
 
@@ -62,14 +87,16 @@ class Fight {
 		if(hp1 <= 0 && hp2 <= 0) {
 			logs.push(highlight(`~[[${name1}]]、~[[${name2}]]双方同时阵亡，平手`));
 
+
 			winner = Fight.sDraw;
 		}
 		else {
 			if(hp1 <= 0) { winner = this.nife2; loser = this.nife1; hpRemain = hp2; }
 			if(hp2 <= 0) { winner = this.nife1; loser = this.nife2; hpRemain = hp1; }
 
+
 			logs.push('');
-			logs.push(highlight(`~[[${loser.name}]]先阵亡，~[[${winner.name}]]胜利，剩余血量 ~{${hpRemain} (${Math.round(100 * hpRemain / winner.hpMax)}%)}`));
+			logs.push(highlight(`~[[${loser.name}]]阵亡，~[[${winner.name}]]获胜，剩余血量 ~{${hpRemain} (${Math.round(100 * hpRemain / winner.healthMax)}%)}`));
 		}
 
 		this.winner = winner;

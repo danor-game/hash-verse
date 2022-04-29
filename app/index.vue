@@ -1,6 +1,6 @@
 <template>
 	<!-- 侧边栏 -->
-	<p-sidebar>
+	<p-sidebar v-menu="menuSidebar">
 		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
 			<template v-if="!tab.isHidden">
 				<p-button
@@ -80,9 +80,23 @@
 	provide('who', who);
 
 
-	const TA = ref(new TabAdmin(modulePre));
+	const TA = new TabAdmin(modulePre);
 	provide('tabAdmin', TA);
 
+
+	const menuSidebar = {
+		useLongPressInMobile: true,
+		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
+		menuItemCss: { hoverBackground: '#bfdbfe' },
+		menuList: [
+			{
+				label: '➕ 创建世界线',
+				fn: tab => {
+					TA.addIcon('世界线', 'map', 'wone', 'hashverse-Wone');
+				},
+			},
+		]
+	};
 
 	const menuTab = {
 		useLongPressInMobile: true,
@@ -91,22 +105,45 @@
 		menuList: [
 			{
 				label: '🚪 关闭',
-				tips: '关闭该标签页',
-				// hidden: tab => tab.typeList == 'follow',
-				fn: tab => TA.value.del(tab),
+				tips: '关闭该世界线',
+				fn: tab => TA.del(tab),
 			},
 		]
 	};
 
 
 	CV.setAll({
-		widthSidebar: '3.5rem',
+		widthSidebar: '7rem',
 		widthScroll: '0.5rem',
 		heightTopbar: '0rem',
 	});
 
 
-	onMounted(() => TA.value.addIcon('主页', 'home', 'home', 'hashverse-Home'));
+
+	const loadWonesRaw = () => {
+		const raw = localStorage.getItem('wones');
+
+
+		try {
+			return raw ? JSON.parse(raw) : [];
+		}
+		catch(error) {
+			$alert(`${error.message || error}`, '加载世界线失败');
+		}
+	};
+
+
+	onMounted(() => {
+		const wonesRaw = loadWonesRaw();
+
+		app.provide('wonesRaw', wonesRaw);
+
+		wonesRaw.forEach(woneRaw =>
+			TA.addIcon('世界线', 'map', 'wone', 'hashverse-Wone', true, woneRaw)
+		);
+	});
+
+
 </script>
 
 <style lang="sass" scoped>
@@ -123,10 +160,8 @@ p-sidebar
 
 
 	p-button
-		@apply relative block rounded-md text-center text-xl shadow-mdd mt-2 cursor-pointer outline-none
+		@apply relative block rounded-md text-center text-xl shadow-mdd mt-2 cursor-pointer outline-none h-8 leading-8
 		width: calc( var(--widthSidebar) - 0.55rem)
-		height: calc( var(--widthSidebar) - 0.55rem)
-		line-height: calc( var(--widthSidebar) - 0.55rem)
 		background-color: var(--colorTextMain)
 		color: var(--colorText)
 
