@@ -1,6 +1,6 @@
 {
 	"name": "hash-verse",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "",
 	"author": "Nuogz",
 	"license": "LGPL-3.0-or-later",
@@ -12,7 +12,7 @@
 	"scripts": {
 		"develop": "vite",
 		"build": "vite build",
-		"preview": "http-server dist -a 127.0.0.1 -p 14785"
+		"preview": "http-server dist -a 127.0.0.1 -p 14763"
 	},
 	"dependencies": {
 		"axios": "^0.26.1",
@@ -24,17 +24,17 @@
 		"@fortawesome/free-solid-svg-icons": "^6.1.1",
 		"@fortawesome/vue-fontawesome": "^3.0.0-5",
 		"@howdyjs/mouse-menu": "^2.0.5",
-		"@vitejs/plugin-vue": "^2.3.1",
-		"autoprefixer": "^10.4.5",
-		"clipboard": "^2.0.10",
-		"eslint": "^8.14.0",
+		"@vitejs/plugin-vue": "^2.3.2",
+		"autoprefixer": "^10.4.7",
+		"clipboard": "^2.0.11",
+		"eslint": "^8.15.0",
 		"eslint-plugin-vue": "^8.7.1",
-		"postcss": "^8.4.12",
+		"postcss": "^8.4.13",
 		"sass": "^1.51.0",
 		"sm3": "^1.0.3",
 		"tailwindcss": "^3.0.24",
 		"tippy.js": "^6.3.7",
-		"vite": "^2.9.5",
+		"vite": "^2.9.8",
 		"vue": "^3.2.33"
 	}
 }

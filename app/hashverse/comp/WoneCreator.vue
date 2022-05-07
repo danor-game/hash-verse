@@ -1,20 +1,21 @@
 <template>
-	<module v-if="data">
+	<module v-if="dataNew">
 		<p-title>新世界线</p-title>
 		<p-box>
-			<Texter v-model="data.name" form align="center" label="名称" />
-			<Texter v-model="data.seed" form _br align="center" label="种子" />
-			<Texter v-model="data.fight.roundMax" form _br align="center" label="最大回合" type="number" min="1" />
+			<Texter v-model="dataNew.name" form align="center" label="名称" />
+			<Texter v-model="dataNew.seed" form _br align="center" label="种子" />
+			<Texter v-model="dataNew.fight.roundMax" form _br align="center" label="最大回合" type="number" min="1" />
 			<Click button text="创建" @click="createWone(nameNew)" />
 		</p-box>
 	</module>
 </template>
 
 <script setup>
-	import { ref, watch } from 'vue';
+	import { computed } from 'vue';
 
 	import Texter from '../../lib/comp/Texter.vue';
 	import Click from '../../lib/comp/Click.vue';
+
 
 	const props = defineProps({
 		data: { type: Object, default: null },
@@ -33,10 +34,10 @@
 		return result;
 	};
 
-	const data = ref(null);
-	watch(() => props.data, dataNew => {
-		if(!dataNew.isInit) {
-			Object.assign(dataNew, {
+
+	const dataNew = computed(() => {
+		if(props.data && !props.data.isInit) {
+			return Object.assign(props.data, {
 				isInit: true,
 
 				name: randomString(),
@@ -44,19 +45,18 @@
 
 				fight: {
 					roundMax: 300
-				}
+				},
+
+				nifes: [],
 			});
 		}
 
-		data.value = dataNew;
+		return props.data;
 	});
 
 
 
-	const createWone = () => {
-		emit('create', data.value);
-	};
-
+	const createWone = () => emit('create', dataNew.value);
 </script>
 
 <style lang="sass" scoped>

@@ -1,6 +1,6 @@
 <template>
 	<!-- 侧边栏 -->
-	<p-sidebar v-menu="menuSidebar">
+	<p-sidebar ref="domSidebar" @contextmenu.self.prevent="showMenuSidebar">
 		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
 			<template v-if="!tab.isHidden">
 				<p-button
@@ -32,17 +32,20 @@
 </template>
 
 <script setup>
-	import { ref, watch, inject, provide, computed, onMounted } from 'vue';
+	import { ref, watch, inject, onMounted, toRaw } from 'vue';
+	import { CustomMouseMenu } from '@howdyjs/mouse-menu';
 
-	import TabAdmin from './lib/TabAdmin.js';
+	import { CV } from './lib/plugin/CSSVar.js';
+	import { $alert, $quest } from './lib/plugin/Alert/Alert.js';
+
+	import WA from './hashverse/WoneAdmin.js';
+	import TA from './lib/TabAdmin.js';
 
 
 	document.title = 'hash-verse';
 
 
 	const app = inject('app');
-	const CV = inject('CV');
-	const $alert = inject('$alert');
 
 
 	const moduleNow = ref(null);
@@ -74,14 +77,7 @@
 	});
 
 
-	const profile = ref({});
-	provide('profile', profile);
-	const who = computed(() => profile.value.id);
-	provide('who', who);
-
-
-	const TA = new TabAdmin(modulePre);
-	provide('tabAdmin', TA);
+	TA.modulePre = modulePre;
 
 
 	const menuSidebar = {
@@ -97,6 +93,9 @@
 			},
 		]
 	};
+	const domSidebar = ref(null);
+	const showMenuSidebar = event => CustomMouseMenu(Object.assign({ el: domSidebar.value }, menuSidebar)).show(event.x, event.y);
+
 
 	const menuTab = {
 		useLongPressInMobile: true,
@@ -104,9 +103,20 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '🚪 关闭',
-				tips: '关闭该世界线',
-				fn: tab => TA.del(tab),
+				label: '🚪 移除',
+				tips: '世界线',
+				fn: async tab => {
+					if(await $quest('是否确定移除该世界线？（移除后将无法恢复！）')) {
+						const index = WA.wones.indexOf(toRaw(tab.info?.wone ?? tab.paramsDelay?.[0]));
+
+						if(index > -1) {
+							WA.wones.splice(index, 1);
+							WA.save();
+						}
+
+						TA.del(tab);
+					}
+				},
 			},
 		]
 	};
@@ -119,31 +129,13 @@
 	});
 
 
-
-	const loadWonesRaw = () => {
-		const raw = localStorage.getItem('wones');
-
-
-		try {
-			return raw ? JSON.parse(raw) : [];
-		}
-		catch(error) {
-			$alert(`${error.message || error}`, '加载世界线失败');
-		}
-	};
-
-
 	onMounted(() => {
-		const wonesRaw = loadWonesRaw();
+		const wones = WA.load();
 
-		app.provide('wonesRaw', wonesRaw);
+		TA.addIcon('世界线', 'map', 'wone', 'hashverse-Wone', false, wones[0]);
 
-		wonesRaw.forEach(woneRaw =>
-			TA.addIcon('世界线', 'map', 'wone', 'hashverse-Wone', true, woneRaw)
-		);
+		wones.slice(1).forEach(wone => TA.addIcon('世界线', 'map', 'wone', 'hashverse-Wone', true, wone));
 	});
-
-
 </script>
 
 <style lang="sass" scoped>

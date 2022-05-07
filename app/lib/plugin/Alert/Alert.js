@@ -1,5 +1,7 @@
 import { createApp } from 'vue';
 
+import { install as installBrop } from '../Brop.js';
+
 import windowAlert from './Alert.vue';
 
 const plugin = { instance: null };
@@ -69,16 +71,9 @@ export const install = async function(app) {
 	const appAlert = createApp(windowAlert);
 	appAlert.provide('$plugin', plugin);
 
-	(await import('../Brop.js')).install(appAlert);
+	installBrop(appAlert);
 
 	const domAlert = document.createElement('div');
 	document.body.appendChild(domAlert);
 	appAlert.mount(domAlert);
-
-
-	app.provide('$alert', $alert);
-	app.provide('$quest', $quest);
-	app.provide('$quest3', $quest3);
-	app.provide('$okay', $okay);
-	app.provide('$fail', $fail);
 };

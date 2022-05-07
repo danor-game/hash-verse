@@ -77,9 +77,6 @@ export const $jump = async function(action, params, configRaw = {}) {
 };
 
 
-export const install = function(app) {
+export const install = app => {
 	$alert = app._context.provides.$alert;
-	app.provide('$get', $get);
-	app.provide('$post', $post);
-	app.provide('$jump', $jump);
 };

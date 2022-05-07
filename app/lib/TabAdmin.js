@@ -10,7 +10,7 @@ class Tab {
 		this.icon = icon;
 		this.typeList = typeList;
 		this.module = module;
-		this.info = { illustsNow: [], params: {}, paramsPre: {} };
+		this.info = {};
 		this.isHidden = isHidden ?? false;
 		this.params = params ?? {};
 	}
@@ -48,6 +48,8 @@ class TabAdmin {
 
 		if(tab && !delay) { this.change(tab, ...params); }
 
+		if(delay) { tab.paramsDelay = params; }
+
 		return tab;
 	}
 
@@ -83,8 +85,11 @@ class TabAdmin {
 		if(this.key == tab.id) { return; }
 
 		this.key = tab.id;
-		tab.params = params;
 		this.modulePre = tab.module;
+
+		tab.params = tab.paramsDelay ?? params;
+		delete tab.paramsDelay;
+
 
 		if(this.histories[this.histories.length - 1] !== tab) { this.histories.push(tab); }
 
@@ -106,6 +111,11 @@ class TabAdmin {
 }
 
 
+const TA = new TabAdmin();
 
-export { Tab };
-export default TabAdmin;
+
+
+export { Tab, TabAdmin };
+
+
+export default TA;

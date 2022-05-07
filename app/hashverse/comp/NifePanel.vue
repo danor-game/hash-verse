@@ -1,22 +1,22 @@
 <template>
 	<p-nife>
 		<p-title :title="nife.title">{{nife.name}}</p-title>
-		<p-attr>生命：{{nife.health}} / {{nife.healthMax}}</p-attr>
-		<progress health :max="nife.healthMax" :value="nife.health" />
-		<p-attr>攻击：{{nife.atk}} / {{nife.atkMax}}</p-attr>
-		<progress atk :max="nife.atkMax" :value="nife.atk" />
-		<p-attr>防御：{{nife.def}} / {{nife.defMax}}</p-attr>
-		<progress def :max="nife.defMax" :value="nife.def" />
-		<p-attr>速度：{{nife.spd}} / {{nife.spdMax}}</p-attr>
-		<progress spd :max="nife.spdMax" :value="nife.spd" />
+		<p-attr>生命：{{nife.attribute.health}} / {{nife.attribute.healthLimit}}</p-attr>
+		<progress health :value="nife.attribute.health" :max="nife.attribute.healthLimit" />
+		<p-attr>攻击：{{nife.attribute.attack}} / {{nife.attribute.attackLimit}}</p-attr>
+		<progress atk :value="nife.attribute.attack" :max="nife.attribute.attackLimit" />
+		<p-attr>防御：{{nife.attribute.defense}} / {{nife.attribute.defenseLimit}}</p-attr>
+		<progress def :value="nife.attribute.defense" :max="nife.attribute.defenseLimit" />
+		<p-attr>速度：{{nife.attribute.speed}} / {{nife.attribute.speedLimit}}</p-attr>
+		<progress spd :value="nife.attribute.speed" :max="nife.attribute.speedLimit" />
 	</p-nife>
 </template>
 
 <script setup>
-	import Nife from '../Nife.js';
+	import Nife0 from '../Nife0.js';
 
 	defineProps({
-		nife: { type: Nife, default: null },
+		nife: { type: Nife0, default: null },
 	});
 </script>
 

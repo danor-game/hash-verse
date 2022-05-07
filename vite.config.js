@@ -21,11 +21,12 @@ export default defineConfig({
 	build: {
 		outDir: resolve(dirApp, 'dist'),
 		emptyOutDir: true,
-		chunkSizeWarningLimit: 1024
+		chunkSizeWarningLimit: 1024,
+		// minify: false
 	},
 	publicDir: resolve(dirApp, 'app', 'public'),
 	clearScreen: false,
 	server: {
-		port: 4785,
+		port: 4763,
 	}
 });
