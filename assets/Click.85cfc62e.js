@@ -1,1 +1,0 @@
-import{a as t,p as a,e as _,t as c}from"./index.ec891db5.js";const r={props:{text:{type:String,default:""}},setup(e){return(p,s)=>(a(),_("comp-click",null,c(e.text),1))}};var o=t(r,[["__scopeId","data-v-e8742294"]]);export{o as default};
