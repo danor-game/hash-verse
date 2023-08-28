@@ -1,17 +1,16 @@
-const spacing = 0.25;
-const unit = 'rem';
-const space = time => `${time * spacing}${unit}`;
 const pluginTailwind = require('tailwindcss/plugin');
 
+// const spacing = 0.25;
+// const unit = 'rem';
+// const space = time => `${time * spacing}${unit}`;
+
+
+
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ['./app/index.html', './app/**/*.{vue,js,ts,jsx,tsx}'],
+	content: ['./src/index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 	theme: {
 		extend: {
-			spacing: {
-				42: space(42),
-				78: space(78),
-				80: space(80),
-			},
 			boxShadow: {
 				mdd: '0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
 			},

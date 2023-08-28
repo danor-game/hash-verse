@@ -1,40 +1,54 @@
 {
-	"name": "hash-verse",
-	"version": "1.2.0",
+	"name": "@danor-game/hash-verse",
+	"version": "2.0.0",
 	"description": "",
-	"author": "Nuogz",
+	"author": "DanoR",
 	"license": "LGPL-3.0-or-later",
-	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "github:danor-game/hash-verse"
+	},
+	"private": true,
 	"type": "module",
+	"typesSource": [
+		"browser",
+		"vue",
+		"vite"
+	],
 	"engines": {
 		"node": ">=14.18.1"
 	},
+	"main": "./app/index.js",
 	"scripts": {
-		"develop": "vite",
-		"build": "vite build",
+		"develop": "vite --force --host",
+		"build": "vite build --force",
 		"preview": "http-server dist -a 127.0.0.1 -p 14763"
 	},
-	"dependencies": {
-		"axios": "^0.26.1",
-		"moment": "^2.29.3"
-	},
 	"devDependencies": {
-		"@fortawesome/fontawesome-svg-core": "^6.1.1",
-		"@fortawesome/free-regular-svg-icons": "^6.1.1",
-		"@fortawesome/free-solid-svg-icons": "^6.1.1",
-		"@fortawesome/vue-fontawesome": "^3.0.0-5",
-		"@howdyjs/mouse-menu": "^2.0.5",
-		"@vitejs/plugin-vue": "^2.3.2",
-		"autoprefixer": "^10.4.7",
-		"clipboard": "^2.0.11",
-		"eslint": "^8.15.0",
-		"eslint-plugin-vue": "^8.7.1",
-		"postcss": "^8.4.13",
-		"sass": "^1.51.0",
+		"@fortawesome/fontawesome-svg-core": "^6.4.2",
+		"@fortawesome/free-solid-svg-icons": "^6.4.2",
+		"@fortawesome/vue-fontawesome": "^3.0.3",
+		"@howdyjs/mouse-menu": "^2.0.9",
+		"@nuogz/aegis": "^1.4.2",
+		"@nuogz/css-var": "^3.0.0",
+		"@nuogz/pangu": "^4.1.0",
+		"@nuogz/utility": "^1.7.1",
+		"@nuogz/vue-alert": "^1.2.1",
+		"@nuogz/vue-components": "^1.10.0",
+		"@nuogz/vue-sidebar": "^2.1.1",
+		"@nuogz/vue-tip": "^1.1.0",
+		"@nuogz/wock-client": "^3.1.2",
+		"@vitejs/plugin-vue": "^4.3.3",
+		"autoprefixer": "^10.4.15",
+		"dayjs": "^1.11.9",
+		"eslint": "^8.48.0",
+		"eslint-plugin-vue": "^9.17.0",
+		"postcss": "^8.4.28",
+		"sass": "^1.66.1",
 		"sm3": "^1.0.3",
-		"tailwindcss": "^3.0.24",
+		"tailwindcss": "^3.3.3",
 		"tippy.js": "^6.3.7",
-		"vite": "^2.9.8",
-		"vue": "^3.2.33"
+		"vite": "^4.4.9",
+		"vue": "^3.3.4"
 	}
 }
