@@ -1,6 +1,6 @@
-import { $alert } from '../lib/plugin/Alert/Alert.js';
+import { $alert } from '@nuogz/vue-alert';
 
-import Wone from './Wone.js';
+import { Wone } from './Wone.js';
 
 
 

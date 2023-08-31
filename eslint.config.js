@@ -142,9 +142,6 @@ if(typesSource.includes('vue')) {
 if(typesSource.includes('vite')) {
 	configs.push({
 		files: ['**/vite.config.js'],
-		ignores: [
-			'eslint.config.js'
-		],
 		languageOptions: {
 			globals: globals.node,
 		},

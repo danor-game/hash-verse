@@ -1,7 +1,7 @@
 
 const highlight = string => String(string)
 	.replace(/~\[(.*?)\]/g, (substr, groupA, index, raw) => {
-		return `<span style="color:green;font-weight:bold;">[${groupA}]</span>`;
+		return `<span style="color:green;font-weight:bold;">${groupA}</span>`;
 	})
 	.replace(/~\{(.*?)\}/g, (substr, groupA, index, raw) => {
 		return `<span style="color:red">${groupA}</span>`;

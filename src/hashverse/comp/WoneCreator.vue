@@ -13,8 +13,8 @@
 <script setup>
 	import { computed } from 'vue';
 
-	import Texter from '../../lib/comp/Texter.vue';
-	import Click from '../../lib/comp/Click.vue';
+	import { Click, Texter } from '@nuogz/vue-components';
+
 
 
 	const props = defineProps({

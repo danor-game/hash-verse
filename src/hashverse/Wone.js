@@ -4,7 +4,7 @@ import Nife0 from './Nife0.js';
 
 
 
-class Nife extends Nife0 {
+export class Nife extends Nife0 {
 	/**
 	 * 名字
 	 * @type {string}
@@ -36,20 +36,42 @@ class Nife extends Nife0 {
 		 */
 		health: 0,
 		/**
-		 * 攻击点
+		 * 生命上限
+		 * @type {number}
+		 */
+		healthLimit: 0,
+		/**
+		 * 攻击
 		 * @type {number}
 		 */
 		attack: 0,
 		/**
-		 * 防御点
+		 * 攻击上限
+		 * @type {number}
+		 */
+		attackLimit: 0,
+		/**
+		 * 防御
 		 * @type {number}
 		 */
 		defense: 0,
 		/**
-		 * 速度点
+		 * 防御上限
+		 * @type {number}
+		 */
+		defenseLimit: 0,
+		/**
+		 * 速度
 		 * @type {number}
 		 */
 		speed: 0,
+		/**
+		 * 速度上限
+		 * @type {number}
+		 */
+		speedLimit: 0,
+		get total() { return this.health + this.attack + this.defense + this.speed; },
+		get totalLimit() { return this.healthLimit + this.attackLimit + this.defenseLimit + this.speedLimit; },
 	};
 
 
@@ -60,7 +82,7 @@ class Nife extends Nife0 {
 	}
 }
 
-class Wone {
+export class Wone {
 	static Nife = Nife;
 
 
@@ -136,7 +158,7 @@ class Wone {
 			if(!attribute.exist) { continue; }
 
 			nife.attribute[attributeKey] = attribute.born(seed, attribute);
-			nife.attribute[attributeKey + 'Limit'] = attribute.max;
+			nife.attribute[`${attributeKey}Limit`] = attribute.max;
 		}
 
 		this.nifes.push(nife);
@@ -147,7 +169,3 @@ class Wone {
 
 
 Object.defineProperty(Wone, 'Nife', { writable: false });
-
-
-
-export default Wone;
