@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import randomString from './random.js';
+import randomString from './random-string.js';
 
 
 class Tab {

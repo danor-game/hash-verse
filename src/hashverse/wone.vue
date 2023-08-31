@@ -36,12 +36,12 @@
 	import { FontAwesomeIcon as Fas } from '@fortawesome/vue-fontawesome';
 	import { faGun, faUsers } from '@fortawesome/free-solid-svg-icons';
 
-	import TA, { Tab } from '../lib/tab-admin.js';
+	import TA, { Tab } from '../lib/TabAdmin.js';
 
 	import { Click, Texter } from '@nuogz/vue-components';
 
-	import NifePanel from './comp/NifePanel.vue';
-	import WoneCreator from './comp/WoneCreator.vue';
+	import NifePanel from './comp/nife-panel.vue';
+	import WoneCreator from './comp/wone-creator.vue';
 
 	import { Wone, Nife } from './Wone.js';
 	import Fight from './Fight.js';

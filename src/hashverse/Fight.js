@@ -9,9 +9,6 @@ const highlight = string => String(string)
 	;
 
 class Fight {
-
-
-
 	static sDraw = Symbol('平手');
 
 

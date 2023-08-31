@@ -44,7 +44,7 @@
 	import { $alert, $quest } from '@nuogz/vue-alert';
 
 	import WA from './hashverse/WoneAdmin.js';
-	import TA from './lib/tab-admin.js';
+	import TA from './lib/TabAdmin.js';
 
 
 	import './index.pcss';
@@ -97,7 +97,7 @@
 			{
 				label: '➕ 创建世界线',
 				fn: tab => {
-					TA.addIcon('世界线', faEarth, 'wone', 'hashverse-Wone');
+					TA.addIcon('世界线', faEarth, 'wone', 'hashverse-wone');
 				},
 			},
 		]
@@ -139,9 +139,9 @@
 	onMounted(() => {
 		const wones = WA.load();
 
-		TA.addIcon('世界线', faEarth, 'wone', 'hashverse-Wone', false, wones[0]);
+		TA.addIcon('世界线', faEarth, 'wone', 'hashverse-wone', false, wones[0]);
 
-		wones.slice(1).forEach(wone => TA.addIcon(`世界线 ${wone.name}`, faEarth, 'wone', 'hashverse-Wone', true, wone));
+		wones.slice(1).forEach(wone => TA.addIcon(`世界线 ${wone.name}`, faEarth, 'wone', 'hashverse-wone', true, wone));
 	});
 </script>
 
