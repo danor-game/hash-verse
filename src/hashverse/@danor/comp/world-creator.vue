@@ -1,11 +1,11 @@
 <template>
 	<module v-if="dataNew">
-		<p-title>新世界线</p-title>
+		<p-title>新世界</p-title>
 		<p-box>
 			<Texter v-model="dataNew.name" form align="center" label="名称" />
 			<Texter v-model="dataNew.seed" form _br align="center" label="种子" />
-			<Texter v-model="dataNew.fight.roundMax" form _br align="center" label="最大回合" type="number" min="1" />
-			<Click button text="创建" @click="createWone(nameNew)" />
+			<Texter v-model="dataNew.option.fight.roundMax" form _br align="center" label="最大回合" type="number" min="1" />
+			<Click button text="创建" @click="createWorld(nameNew)" />
 		</p-box>
 	</module>
 </template>
@@ -13,6 +13,7 @@
 <script setup>
 	import { computed } from 'vue';
 
+	import { randomString } from '@nuogz/utility';
 	import { Click, Texter } from '@nuogz/vue-components';
 
 
@@ -23,28 +24,21 @@
 	const emit = defineEmits(['create']);
 
 
-	const dictRandom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	const randomString = (len = 6) => {
-		let result = '';
-
-		for(let i = 0; i < len; i++) {
-			result += dictRandom.charAt(Math.floor(Math.random() * dictRandom.length));
-		}
-
-		return result;
-	};
-
 
 	const dataNew = computed(() => {
 		if(props.data && !props.data.isInit) {
+			const seed = randomString(6);
+
 			return Object.assign(props.data, {
 				isInit: true,
 
-				name: randomString(),
-				seed: '',
+				name: seed,
+				seed: seed,
 
-				fight: {
-					roundMax: 300
+				option: {
+					fight: {
+						roundMax: 300,
+					}
 				},
 
 				nifes: [],
@@ -56,12 +50,12 @@
 
 
 
-	const createWone = () => emit('create', dataNew.value);
+	const createWorld = () => emit('create', dataNew.value);
 </script>
 
 <style lang="sass" scoped>
 p-title
-	@apply block m-4 text-2xl text-gray-600
+	@apply block m-4 text-2xl text-[var(--cMain)]
 
 p-box
 	@apply m-4

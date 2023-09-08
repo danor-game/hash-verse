@@ -5,16 +5,18 @@
 			<Texter v-model="nameNew" name-new align="center" label="名" label-split="&nbsp;" @keyup.enter.exact="createNife(nameNew)" />
 			<Click button text="加入" @click="nameNew && createNife(nameNew)" />
 			<Click button text="清空" @click="clearNife" />
-			<Texter v-model="T.wone.seed" class="inblock m-4 w-40 p-1" align="center" label="种子" label-split="&nbsp;" readonly />
+			<Texter v-model="T.world.seed" class="inblock m-4 ml-0 w-40 p-1" align="center" label="种子" label-split="&nbsp;" @keyup.enter.exact="flushWorld" />
+			<Click button text="变换" @click="flushWorld" />
+			<Click button text="随机变换" @click="(T.world.seed = randomString(6)), flushWorld()" />
 			<br />
 			<p-nifes-box>
 				<div><Fas :icon="faUsers" /> 你的nifes</div>
 				<template v-for="(nife, index) of nifes" :key="`nife-${index}`">
-					<NifePanel :nife="nife" @click.left="appendFighter(nife)" @remove="removeNife(nife)" />
+					<NifePanel :nife="nife" @click.left.exact="appendFighter(nife)" @remove="removeNife(nife)" />
 				</template>
 				<div><Fas :icon="faGun" /> 出战的nifes</div>
 				<template v-for="(nife, index) of nifesFight" :key="`nife-fight-${index}`">
-					<NifePanel :nife="nife" @click="removeFighter(nife)" />
+					<NifePanel :nife="nife" @click.left.exact="removeFighter(nife)" />
 				</template>
 				<br />
 				<Click button text="开始" @click="startFight" /><br />
@@ -26,7 +28,7 @@
 			</p-fight-log-box>
 		</template>
 		<template v-if="!W">
-			<WoneCreator :data="T.dataWoneNew" @create="createWone" />
+			<WorldCreator :data="T.dataWorldNew" @create="createWorld" />
 		</template>
 	</module>
 </template>
@@ -36,58 +38,54 @@
 	import { FontAwesomeIcon as Fas } from '@fortawesome/vue-fontawesome';
 	import { faGun, faUsers } from '@fortawesome/free-solid-svg-icons';
 
-	import TA, { Tab } from '../lib/TabAdmin.js';
-
+	import { randomString } from '@nuogz/utility';
+	import { tabAdmin, Tab } from '@nuogz/vue-sidebar';
 	import { Click, Texter } from '@nuogz/vue-components';
 
 	import NifePanel from './comp/nife-panel.vue';
-	import WoneCreator from './comp/wone-creator.vue';
+	import WorldCreator from './comp/world-creator.vue';
 
-	import { Wone, Nife } from './Wone.js';
-	import Fight from './Fight.js';
-	import WA from './WoneAdmin.js';
+	import WorldAdmin from '../lib/world-admin.js';
 
+	import World from './world.js';
+	import Fight from './fight.js';
 
-
-
-	onMounted(() => TA.emitChange());
 
 
 	const now = ref(new Tab());
 	const T = computed(() => now.value.info);
 
-	/** @type {import('vue').ComputedRef<Wone>} */
-	const W = computed(() => T.value?.wone);
+	/** @type {import('vue').ComputedRef<World>} */
+	const W = computed(() => T.value?.world);
 	const nifes = computed(() => W.value.nifes);
 
 
 
+	onMounted(() => tabAdmin.emitChanged('mounted'));
+	tabAdmin.addTabHandle('hashverse-@danor-world', now, tab => {
+		const [world] = tab.params;
 
-	TA.addChanger('wone', tab => {
-		now.value = tab;
-
-
-		if(!tab.info.isInit) {
-			tab.info.isInit = true;
-
-			let [wone] = tab.params;
-
-			if(wone) {
-				tab.info.wone = wone;
-				tab.title = `世界线 ${tab.info.wone.name}`;
-			}
-			else {
-				tab.info.dataWoneNew = {};
-			}
+		if(world) {
+			tab.info.world = world;
+			tab.title = `${tab.info.world.name}`;
+		}
+		else {
+			tab.info.dataWorldNew = {};
 		}
 	});
 
-	const createWone = data => {
-		const wone = T.value.wone = new Wone(data);
-		now.value.title = `世界线 ${wone.name}`;
+	const createWorld = data => {
+		const world = T.value.world = new World(data);
+		now.value.title = `${world.name}`;
 
-		WA.wones.push(wone);
-		WA.save();
+		WorldAdmin.worlds.push(world);
+		WorldAdmin.save();
+	};
+	const flushWorld = () => {
+		W.value.flush();
+		W.value.nifes.forEach(nife => nife.flush());
+
+		WorldAdmin.save();
 	};
 
 
@@ -97,13 +95,15 @@
 
 	/** @param {string} name */
 	const createNife = async name => {
+		if(~W.value.nifes.findIndex(nife => nife.name == name)) { return; }
+
 		W.value.born({ name });
 
 		nameNew.value = '';
 
-		WA.save();
+		WorldAdmin.save();
 	};
-	/** @param {Nife} nife */
+	/** @param {import('./nife.js').default} nife */
 	const removeNife = nife => {
 		const index = nifes.value.indexOf(nife);
 
@@ -111,26 +111,31 @@
 
 		removeFighter(nife);
 
-		WA.save();
+		WorldAdmin.save();
 	};
 	const clearNife = () => {
 		nifes.value.splice(0, nifes.value.length);
 
-		WA.save();
+		WorldAdmin.save();
 	};
 
 
-	/** @type {import('vue').ComputedRef<Nife[]>} */
-	const nifesFight = ref([]);
+	const nifesFight = computed(() => W.value.namesFighter.map(name => W.value.nifes.find(nife => nife.name == name)));
 	const appendFighter = nife => {
-		if(nifesFight.value.length < 2) {
-			nifesFight.value.push(nife);
+		if(W.value.namesFighter.length < 2) {
+			W.value.namesFighter.push(nife.name);
+
+			WorldAdmin.save();
 		}
 	};
 	const removeFighter = nife => {
-		const index = nifesFight.value.indexOf(nife);
+		const index = W.value.namesFighter.indexOf(nife.name);
 
-		if(index > -1) { nifesFight.value.splice(index, 1); }
+		if(~index) {
+			W.value.namesFighter.splice(index, 1);
+
+			WorldAdmin.save();
+		}
 	};
 
 
@@ -154,12 +159,12 @@
 
 p-nifes-box
 	@apply inblock p-4 overflow-auto
-	width: calc( 70dvw - (var(--widthSidebar) + var(--widthScroll)) / 2)
+	width: calc( 60dvw - (var(--widthSidebar) + var(--widthScroll)) / 2)
 	height: calc( 92dvh )
 
 p-fight-log-box
 	@apply inblock p-4 overflow-auto
-	width: calc( 30dvw - (var(--widthSidebar) + var(--widthScroll)) / 2)
+	width: calc( 40dvw - (var(--widthSidebar) + var(--widthScroll)) / 2)
 	height: calc( 92dvh )
 
 	p-log
