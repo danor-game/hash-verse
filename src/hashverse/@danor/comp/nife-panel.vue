@@ -1,5 +1,5 @@
 <template>
-	<p-nife @click.right.prevent="emit('remove')">
+	<p-nife>
 		<p-title :title="nife.title"><Fas :icon="faUser" /> {{ nife.name }}</p-title>
 		<p-attr>生命：{{ nife.attribute.health }} / {{ nife.attribute.healthMax }}</p-attr>
 		<progress health :value="nife.attribute.health" :max="nife.attribute.healthMax" />
@@ -26,7 +26,6 @@
 	defineProps({
 		nife: { type: NifeFrame, default: null },
 	});
-	const emit = defineEmits(['remove']);
 </script>
 
 <style lang="sass" scoped>
@@ -47,7 +46,7 @@ p-nife
 		@apply block ml-2 elli
 
 	progress
-		@apply block ml-2 mb-2 h-1
+		@apply block ml-2 mb-2 h-2
 		width: calc(100% - theme('spacing.2'))
 
 		&::-webkit-progress-bar

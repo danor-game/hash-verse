@@ -1,7 +1,8 @@
 export const highlight = string => String(string)
-	.replace(/~\[(.*?)\]/g, (substr, groupA, index, raw) => `<span style="color:var(--cHighlightNoun);font-weight:bold">${groupA}</span>`)
-	.replace(/~g\{(.*?)\}/g, (substr, groupA, index, raw) => `<span style="color:var(--cHighlightGreen)">${groupA}</span>`)
-	.replace(/~r\{(.*?)\}/g, (substr, groupA, index, raw) => `<span style="color:var(--cHighlightRed)">${groupA}</span>`)
+	.replace(/~\[(.*?)\]/g, (substr, groupA, index, raw) => `<span noun>${groupA}</span>`)
+	.replace(/~g\{(.*?)\}/g, (substr, groupA, index, raw) => `<span green>${groupA}</span>`)
+	.replace(/~r\{(.*?)\}/g, (substr, groupA, index, raw) => `<span red>${groupA}</span>`)
+	.replace(/~o\{(.*?)\}/g, (substr, groupA, index, raw) => `<span orange>${groupA}</span>`)
 	;
 
 
@@ -82,8 +83,6 @@ export default class Fight {
 
 
 
-
-
 		let { name: name1, attribute: { speed: spd1 } } = nife1;
 		let { name: name2, attribute: { speed: spd2 } } = nife2;
 
@@ -126,6 +125,11 @@ export default class Fight {
 
 			for(const nife of nifesOrderFight) {
 				nife.action(nifes.filter(n => n != nife), logs);
+
+				logs.push(highlight(
+					`~[${nife1.name}] <progress health value="${body1.health}" max="${body1.healthMax}"></progress><p-progress-text>${body1.health}</p-progress-text>` +
+					`~[${nife2.name}] <progress health value="${body2.health}" max="${body2.healthMax}"></progress><p-progress-text>${body2.health}</p-progress-text>`
+				));
 
 				const winner = this.isEnd();
 

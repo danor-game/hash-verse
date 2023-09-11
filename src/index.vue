@@ -89,10 +89,8 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '➕ 创建世界',
-				fn: tab => {
-					tabAdmin.add('hashverse-@danor-world', optionTabWorld);
-				},
+				label: '➕ 创建D世界',
+				fn: tab => tabAdmin.add('hashverse-@danor-world', optionTabWorld)
 			},
 		]
 	};

@@ -25,7 +25,7 @@ export class WorldAdmin {
 	}
 
 	save() {
-		localStorage.setItem('worlds', JSON.stringify(this.worlds.map(world => world.toJSON())));
+		localStorage.setItem('worlds', JSON.stringify(this.worlds.map(world => world.toRaw())));
 	}
 }
 

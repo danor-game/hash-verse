@@ -15,7 +15,7 @@ export default class Nife extends NifeFrame {
 
 	/**
 	 * 世界
-	 * @type {World}
+	 * @type {import('./world.js').default}
 	 */
 	world;
 
@@ -131,7 +131,7 @@ export default class Nife extends NifeFrame {
 	}
 
 
-	toJSON() {
+	toRaw() {
 		return {
 			name: this.name
 		};
